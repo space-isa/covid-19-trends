@@ -2,6 +2,7 @@ library(readr)
 library(tibble)
 library(tidyverse)
 library(dplyr)
+library(ggplot2)
 
 #  Load csv file
 covid_df <- read_csv('./input/covid19.csv')
@@ -87,3 +88,50 @@ answer1
 
 question2
 answer2
+
+covid_top_10
+par(mfrow=c(1,2))
+
+#  Horizontal bar plot: Ratios for the top 10 countries
+round(covid_top_10$ratio, digits = 3) <- covid_top_10
+plot <- ggplot(data=covid_top_10, aes(x=ratio, y=reorder(Country_Region, -ratio), fill=ratio)) +
+        geom_bar(stat="identity") + guides(fill=F) +
+        #geom_text(aes(label=round(ratio, digits = 3)), vjust=1.6, color="white", size=3.5) +
+        theme(panel.grid.major = element_blank(), 
+              panel.grid.minor = element_blank(),
+              panel.background = element_blank()) + 
+        ggtitle("Ratio of positive cases vs. number of tests") + xlab(" ") + ylab(" ")
+plot
+
+# Bar plot: Cumulative cases in the US
+filtered_us <- filter(covid_df, Country_Region == "United States")
+
+plot2 <- ggplot(data=filtered_us, aes(x=Date, y=daily_positive)) +
+  geom_bar(stat="identity", fill="#53b0e2") +
+  #geom_text(aes(label=max(daily_positive)), vjust=1.6, color="white", size=3.5) +
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank()) + 
+  ggtitle("Cumulative cases in the United States") + xlab(" ") + ylab("Number of Cases")
+plot2
+
+# Bar plot: Cumulative cases in the UK
+filtered_uk <- filter(covid_df, Country_Region == "United Kingdom")
+
+plot3 <- ggplot(data=filtered_uk, aes(x=Date, y=daily_positive)) +
+  geom_bar(stat="identity", fill="#56B4E9") +
+  #geom_text(aes(label=max(daily_positive)), vjust=1.6, color="white", size=3.5) +
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank()) +
+  ggtitle("Cumulative cases in the United Kingdom") + xlab(" ") + ylab(" ")
+plot3
+
+require(gridExtra)
+grid.arrange(plot, 
+             plot2, plot3, 
+             nrow=2, ncol=2,
+             layout_matrix = rbind(c(1,1), c(2,3)))
+
+#  Number of countries included in the data
+length(unique(covid_df$Country_Region))
