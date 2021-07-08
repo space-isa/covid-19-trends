@@ -1,7 +1,7 @@
 # covid-19-trends
 Exploring Covid-19 trends using R
 
-![](https://github.com/space-isa/covid-19-trends/blob/main/figures/positive-cases-v-tests.png?raw=true)
+![](https://github.com/space-isa/covid-19-trends/blob/main/figures/covid-trends-ratio-sp.png?raw=true)
 A bar plot showing the ratio of positive Covid-19 cases vs tests for the top 10 countries with the highest overall cases.
 
 ## About
